@@ -3,10 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>StickyNotes</title>
+    <link href="CSS/normalize.css" rel="stylesheet">
     <link href="CSS/index.css" rel="stylesheet">
 </head>
 <body>
-<button id="create">创建</button>
+<nav>
+    <div class="navTitle">我的便签</div>
+</nav>
+
+<div class="container">
+    <div class="main">
+        <div class="mainContent" id="mainContent">
+        </div>
+    </div>
+    <div class="left">
+        <button id="create">创建</button>
+    </div>
+    <div class="right">
+        <div class="canvasDiv">
+            <canvas id="clock" width="200px" height="200px"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="js/common.js"></script>
 <script src="js/index.js"></script>
+<script type="text/javascript" src="js/clock.js"></script>
+
 </body>
 </html>

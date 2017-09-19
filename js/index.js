@@ -164,13 +164,14 @@ app.store = {
 
 
 
-    }
+    };
     document.addEventListener("DOMContentLoaded",function(e){
-        //创建按钮事件
+        var mainWidth = $("#mainContent").clientWidth;
+
         $("#create").addEventListener("click",function(e){
             var note = new Note({
-                left:Math.round(Math.random()*(innerWidth-220)),
-                top:Math.round(Math.random()*(innerHeight-320)),
+                left:Math.round(Math.random()*(mainWidth-220))+300,
+                top:Math.round(Math.random()*(innerHeight-320))+40,
                 zIndex: maxZIndex++
 
             });
@@ -183,10 +184,15 @@ app.store = {
             if(!moveNote){
                 return;
             }
-            moveNote.style.left = e.clientX - startX+"px";
-            moveNote.style.top = e.clientY - startY+"px";
-          /*  clearTimeout(mouseTimer);
-            setTimeout(function,300)*/
+            var l =  e.clientX - startX,
+                t=   e.clientY - startY;
+            if( l>=300 && l<=(winWidth-300-220)){
+                moveNote.style.left=l+"px";
+            }
+            if( t>=40 && t<=(winHeight-320)){
+                moveNote.style.top=t+"px";
+            }
+
 
         }
         function mouseupHander(e){

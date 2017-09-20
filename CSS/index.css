@@ -73,9 +73,14 @@ nav .navTitle{
 /*中间栏样式*/
 
 /*右栏样式*/
+.right .curTime{
+    text-align: center;
+    font-size: 16px;
+
+}
 .right .canvasDiv{
     text-align: center;
-    margin-top: 100px;
+    margin-top: 20px;
 }
 
 
@@ -87,23 +92,36 @@ nav .navTitle{
     height:300px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.5);
     padding:10px;
-    background-color: rgb(255, 240, 70);;
+    background-color: rgb(204, 255, 0);
+    overflow: auto;
 }
-.m-note .u-close{
+.m-note .u-operator{
+    height: 30px;
+    background-color: rgb(204,204,51);
     position: absolute;
-    top:-15px;
-    left:-15px;
-    background: url(../images/close.png) no-repeat;
+    top: 0;
+    left: 0;
+    right:0;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+}
+.m-note .u-operator .flex-item{
+    flex-grow:1;
+    text-align: center;
+}
+.m-note .u-operator .flex-item i{
+    display: inline-block;
     width:30px;
     height:30px;
-    display:none;
+    line-height: 30px;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
 }
-.m-note:hover .u-close{
-    display: block;
-}
+
 .m-note .u-editor{
     position: absolute;
-    top:10px;
+    top:32px;
     bottom: 30px;
     left:10px;
     right:10px;
@@ -113,7 +131,7 @@ nav .navTitle{
 .m-note .u-timestamp{
     height: 30px;
     line-height: 30px;
-    background-color: #db0;
+    background-color: rgb(204,204,51);
     padding: 0 0 0 10px;
     position: absolute;
     bottom: 0;

@@ -46,7 +46,7 @@ app.store = {
             notes[id] = content;
         }
         localStorage[this.__store_key] = JSON.stringify(notes);
-        console.log("save note, id:"+id+"content:"+JSON.stringify(notes[id]));
+       // console.log("save note, id:"+id+"content:"+JSON.stringify(notes[id]));
     },
     getNotes:function(){
         return  JSON.parse(localStorage[this.__store_key] || '{}');
@@ -68,7 +68,11 @@ app.store = {
     var maxZIndex=0;
 
     var noteTpl = `
-        <i class="u-close"></i>
+        <div class="u-operator">
+            <div class="flex-item"><i class="iconfont icon-guanbi u-close"></i></div>
+            <div class="flex-item"><i class="iconfont icon-color u-changeColor"></i></div>
+            <div class="flex-item"><i class="iconfont icon-delete u-delete"></i></div>
+        </div>
         <div class="u-editor" contenteditable="true"></div>
         <div class="u-timestamp">
             <span>Update:</span>
@@ -81,6 +85,9 @@ app.store = {
         note.id =options.id || "m-note-"+Date.now();
         note.innerHTML = noteTpl;
         $(".u-editor",note).innerHTML = options.content || "";
+        note.style.backgroundColor = options.color || "#cf0";
+        $(".u-timestamp",note).style.backgroundColor = options.timeColor || "#cc3";
+        $(".u-operator",note).style.backgroundColor = options.timeColor || "#cc3";
         note.style.left= options.left+"px";
         note.style.top= options.top+"px";
         note.style.zIndex = options.zIndex;
@@ -102,6 +109,8 @@ app.store = {
         store.set(this.note.id,{
             left:this.note.offsetLeft,
             top:this.note.offsetTop,
+            color:$(".u-editor",this.note).style.backgroundColor,
+            timeColor:$(".u-timestamp",this.note).style.backgroundColor,
             zIndex:parseInt(this.note.style.zIndex),
             content:$(".u-editor",this.note).innerHTML,
             updateTime: this.updateTimeInMs
@@ -109,9 +118,9 @@ app.store = {
     }
 
     Note.prototype.close = function(e){
-        console.log("close note");
+       // console.log("close note");
         document.body.removeChild(this.note);
-    }
+    };
     Note.prototype.addEvent = function(){
 
         //便签的mousedown事件
@@ -133,8 +142,11 @@ app.store = {
         this.note.addEventListener("mousedown",mousedownHander);
 
 
-        //便签的输入事件
+
         var editor = $(".u-editor",this.note);
+
+
+        //便签的输入事件
         var inputimer ;
          var inputHandler= function(e){
             var content = editor.innerHTML;
@@ -147,33 +159,64 @@ app.store = {
                 });
                 this.updateTime(time);
             }.bind(this),300);
-
         }.bind(this);
         editor.addEventListener("input",inputHandler);
 
-        //关闭处理程序与
-        var closeBtn = $(".u-close",this.note);
-        //这样子做的目的是点击关闭后事件移除掉
+
+        var closeBtn = $(".u-close",this.note),
+            deleteBtn = $(".u-delete",this.note),
+            changeColorBtn = $(".u-changeColor",this.note);
+
+
+        //关闭一个便签，从页面上删除，但不删除本地的数据
         var closeHander = function (e){
-            store.remove(this.note.id);
             this.close(e);
+            //这样子做的目的是点击关闭后事件移除掉
             closeBtn.removeEventListener("click",closeHander);
+            deleteBtn.removeEventListener("click",deleteHander);
             this.note.removeEventListener("mousedown",mousedownHander);
         }.bind(this);
         closeBtn.addEventListener("click",closeHander);
 
+        // 删除，从页面上删除，且删除本地的数据
+        var deleteHander = function (e){
+            store.remove(this.note.id);
+            this.close(e);
+            closeBtn.removeEventListener("click",closeHander);
+            deleteBtn.removeEventListener("click",deleteHander);
+            this.note.removeEventListener("mousedown",mousedownHander);
+        }.bind(this);
+        deleteBtn.addEventListener("click",deleteHander);
+
+        //给便签更改颜色
+        var ucolors = ["rgb(204, 255, 0)","rgb(51, 255, 255)","rgb(51, 255, 51)","rgb(204, 51, 255)","rgb(255, 0, 0)"],
+            timecolors=["rgb(204,204,51)","rgb(51, 204, 204)","rgb(51, 204, 0)","rgb(204, 0, 204)","rgb(204, 51, 51)"],
+            colorLength=ucolors.length;
+        var changeColorHander=function (e) {
+            var index =ucolors.indexOf(this.note.style.backgroundColor);
+            index = (index===colorLength-1)?(0):(++index);
+            this.note.style.backgroundColor=ucolors[index];
+            $(".u-timestamp",this.note).style.backgroundColor = timecolors[index];
+            $(".u-operator",this.note).style.backgroundColor = timecolors[index];
+            var time=Date.now();
+            this.updateTime(time);
+            store.set(this.note.id,{
+                timeColor:timecolors[index],
+                color:ucolors[index],
+                updateTime:time
+            });
+        }.bind(this);
+       changeColorBtn.addEventListener("click",changeColorHander);
 
 
     };
     document.addEventListener("DOMContentLoaded",function(e){
-        var mainWidth = $("#mainContent").clientWidth;
-
         $("#create").addEventListener("click",function(e){
+            var mainWidth = $("#mainContent").clientWidth;
             var note = new Note({
                 left:Math.round(Math.random()*(mainWidth-220))+300,
-                top:Math.round(Math.random()*(innerHeight-320))+40,
+                top:Math.round(Math.random()*(winHeight-320))+40,
                 zIndex: maxZIndex++
-
             });
             note.save();
         });
@@ -184,6 +227,7 @@ app.store = {
             if(!moveNote){
                 return;
             }
+
             var l =  e.clientX - startX,
                 t=   e.clientY - startY;
             if( l>=300 && l<=(winWidth-300-220)){
@@ -192,7 +236,6 @@ app.store = {
             if( t>=40 && t<=(winHeight-320)){
                 moveNote.style.top=t+"px";
             }
-
 
         }
         function mouseupHander(e){

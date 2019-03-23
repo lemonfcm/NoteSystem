@@ -6,12 +6,11 @@ body{
 
 /*导航栏*/
 nav{
-    width:100%;
+    min-width:1024px;
     height: 40px;
     background-color: #48525e;
 }
 nav .navTitle{
-    width: 1024px;
     min-width: 1024px;
     margin: 0 auto;
     font-family: "Helvetica", "Tahoma, Arial", "sans-serif";
@@ -24,7 +23,7 @@ nav .navTitle{
 
 /*三栏布局*/
 .container{
-    width: 100%;
+    min-width: 1024px;
 }
 .container .main{
     float: left;
@@ -34,6 +33,7 @@ nav .navTitle{
 .container .main .mainContent{
     margin: 0 300px;
     height: 100%;
+    min-width: 424px;
 }
 .container .left{
     box-sizing: border-box;

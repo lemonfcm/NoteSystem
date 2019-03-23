@@ -174,6 +174,7 @@ app.store = {
             //这样子做的目的是点击关闭后事件移除掉
             closeBtn.removeEventListener("click",closeHander);
             deleteBtn.removeEventListener("click",deleteHander);
+            changeColorBtn.removeEventListener("click",changeColorHander);
             this.note.removeEventListener("mousedown",mousedownHander);
         }.bind(this);
         closeBtn.addEventListener("click",closeHander);
@@ -184,6 +185,7 @@ app.store = {
             this.close(e);
             closeBtn.removeEventListener("click",closeHander);
             deleteBtn.removeEventListener("click",deleteHander);
+            changeColorBtn.removeEventListener("click",changeColorHander);
             this.note.removeEventListener("mousedown",mousedownHander);
         }.bind(this);
         deleteBtn.addEventListener("click",deleteHander);

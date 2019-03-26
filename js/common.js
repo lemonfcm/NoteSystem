@@ -2,7 +2,8 @@
  * Created by 付彩梅 on 2017/9/19.
  */
 var winHeight = 0,
-    winWidth=0;
+    mainWidth,
+    mainHeight;
 
 (function () {
 
@@ -17,12 +18,13 @@ var winHeight = 0,
     function initialSize() {
         if (window.innerHeight){
             winHeight = window.innerHeight;
-            winWidth=window.innerWidth;
         }else if ((document.body) && (document.body.clientHeight)){
             winHeight = document.body.clientHeight;
-            winWidth = document.body.clientWidth;
         }
         document.querySelector(".container").style.height = (winHeight-40)+"px";
+        var c=document.querySelector("#mainContent");
+        mainWidth = c.clientWidth;
+        mainHeight = c.clientHeight;
     }
 
     //2.对右栏日历中的时间进行初始化
